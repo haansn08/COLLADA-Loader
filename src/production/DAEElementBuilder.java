@@ -6,10 +6,18 @@ package production;
 public class DAEElementBuilder {
 
     private static float[] parseFloatArray(String floats) {
-        String[] singleFloatTexts = floats.split(" ");
-        float[] result = new float[singleFloatTexts.length];
-        for (int i = 0; i < singleFloatTexts.length; i++) {
-            result[i] = Float.parseFloat(singleFloatTexts[i]);
+        String[] singleFloatStrings = floats.split(" ");
+        float[] result = new float[singleFloatStrings.length];
+        for (int i = 0; i < singleFloatStrings.length; i++) {
+            result[i] = Float.parseFloat(singleFloatStrings[i]);
+        }
+        return result;
+    }
+    private static int[] parseIntArray(String ints) {
+        String[] singleIntStrings = ints.split(" ");
+        int[] result = new int[singleIntStrings.length];
+        for (int i = 0; i < singleIntStrings.length; i++) {
+            result[i] = Integer.parseInt(singleIntStrings[i]);
         }
         return result;
     }
@@ -19,6 +27,12 @@ public class DAEElementBuilder {
             return new DAEFloatArray(
                     parseFloatArray(content)
             );
+        if (tag.equalsIgnoreCase("p"))
+            return new DAEIntArray(
+                    parseIntArray(content)
+            );
         return null;
     }
+
+
 }
