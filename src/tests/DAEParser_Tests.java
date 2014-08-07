@@ -1,5 +1,6 @@
 package tests;
 
+import COLLADA.DAEIntArray;
 import junit.framework.TestCase;
 import COLLADA.DAEFloatArray;
 import COLLADA.DAEParser;
@@ -32,5 +33,19 @@ public class DAEParser_Tests extends TestCase {
 
        DAESource normalsSource = (DAESource)sphereParser.getElementByID("Icosphere-mesh-normals");
        assertEquals(80, normalsSource.getCount());
+   }
+
+   public void testParseGeometry() throws Exception{
+       DAEParser suzanneParser = new DAEParser(SUZANNE_FILE);
+       DAEGeometry suzanneGeometry = suzanneParser.getElementByID("Suzanne-mesh");
+       DAESource meshPositions = suzanneGeometry.getSourceBySemantic(DAEGeometry.POSITION);
+       assertEquals(507, meshPositions.getCount());
+       assertEquals(3, meshPositions.getStride());
+
+       DAESource meshNormals = suzanneGeometry.getSourceBySemantic(DAEGeometry.NORMAL);
+       assertEquals(968, meshNormals.getCount());
+       assertEquals(968 * 3, meshNormals.getData().getCount());
+
+       DAEIntArray indices = suzanneGeometry.getIndices();
    }
 }
