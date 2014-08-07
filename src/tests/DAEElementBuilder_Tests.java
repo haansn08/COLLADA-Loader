@@ -1,9 +1,9 @@
 package tests;
 
 import junit.framework.TestCase;
-import production.DAEElementBuilder;
-import production.DAEFloatArray;
-import production.DAEIntArray;
+import COLLADA.DAEElementBuilder;
+import COLLADA.DAEFloatArray;
+import COLLADA.DAEIntArray;
 
 /**
  * Created by Stefan Haan on 8/4/14.

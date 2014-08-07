@@ -1,4 +1,4 @@
-package production;
+package COLLADA;
 
 /**
  * Created by Stefan Haan on 8/4/14.
@@ -35,4 +35,9 @@ public class DAEElementBuilder {
     }
 
 
+    public static DAEElement buildForward(String tag) {
+        if (tag.equalsIgnoreCase("source"))
+            return new DAESource();
+        return null;
+    }
 }

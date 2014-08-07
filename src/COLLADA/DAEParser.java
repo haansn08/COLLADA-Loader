@@ -1,4 +1,4 @@
-package production;
+package COLLADA;
 
 import org.xml.sax.XMLReader;
 import javax.xml.parsers.SAXParser;
@@ -16,10 +16,6 @@ public class DAEParser{
         XMLReader xmlReader = saxParser.getXMLReader();
         xmlReader.setContentHandler(contentHandler);
         xmlReader.parse(filename);
-    }
-
-    public int getElementCount() {
-        return contentHandler.getElementCount();
     }
 
     public DAEElement getElementByID(String id) {
