@@ -1,10 +1,7 @@
 package tests;
 
-import COLLADA.DAEIntArray;
+import COLLADA.*;
 import junit.framework.TestCase;
-import COLLADA.DAEFloatArray;
-import COLLADA.DAEParser;
-import COLLADA.DAESource;
 
 /**
  * Created by Stefan Haan on 8/4/14.
@@ -37,15 +34,16 @@ public class DAEParser_Tests extends TestCase {
 
    public void testParseGeometry() throws Exception{
        DAEParser suzanneParser = new DAEParser(SUZANNE_FILE);
-       DAEGeometry suzanneGeometry = suzanneParser.getElementByID("Suzanne-mesh");
-       DAESource meshPositions = suzanneGeometry.getSourceBySemantic(DAEGeometry.POSITION);
+       DAEGeometry suzanneGeometry = (DAEGeometry) suzanneParser.getElementByID("Suzanne-mesh");
+       DAESource meshPositions = suzanneGeometry.getSourceBySemantic(DAESemantic.POSITION);
        assertEquals(507, meshPositions.getCount());
        assertEquals(3, meshPositions.getStride());
 
-       DAESource meshNormals = suzanneGeometry.getSourceBySemantic(DAEGeometry.NORMAL);
+       DAESource meshNormals = suzanneGeometry.getSourceBySemantic(DAESemantic.NORMAL);
        assertEquals(968, meshNormals.getCount());
        assertEquals(968 * 3, meshNormals.getData().getCount());
 
        DAEIntArray indices = suzanneGeometry.getIndices();
+       assertEquals(5808, indices.getCount());
    }
 }

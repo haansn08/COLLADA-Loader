@@ -5,13 +5,15 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Stack;
 
 /**
  * Created by Stefan Haan on 8/4/14.
  */
 class DAEContentHandler extends DefaultHandler {
-    private HashMap<String, DAEElement> elementsMap = new HashMap<String, DAEElement>();
+    private DAEGeometry geometry = new DAEGeometry();
+    private Map<String, DAEElement> elementsMap = new HashMap<String, DAEElement>();
     private Stack<String> elementTagStack = new Stack<String>();
     private Stack<String> elementIdStack = new Stack<String>();
     private StringBuilder currentElementContent = new StringBuilder();
@@ -32,11 +34,30 @@ class DAEContentHandler extends DefaultHandler {
         if (forwardBuild != null)
             elementsMap.put(id, forwardBuild);
 
+        if(tagName.equalsIgnoreCase("geometry"))
+        {
+            geometry = new DAEGeometry();
+            elementsMap.put(id, geometry);
+        }
+
         if (tagName.equalsIgnoreCase("accessor")){
             String parentSourceId = elementIdStack.peek();
             DAESource parentSource = (DAESource) elementsMap.get(parentSourceId);
             parentSource.setCount(Integer.parseInt(attributes.getValue("count")));
             parentSource.setStride(Integer.parseInt(attributes.getValue("stride")));
+        }
+        if (tagName.equalsIgnoreCase("input")){
+            try {
+                String semanticString = attributes.getValue("semantic");
+                DAESemantic semantic = DAESemantic.valueOf(semanticString);
+                String sourceId = attributes.getValue("source").substring(1);
+                DAESource source = (DAESource) getElementByID(sourceId);
+                geometry.setSource(semantic, source);
+            }
+            catch (IllegalArgumentException e)
+            {
+                //Semantic not found
+            }
         }
     }
 
@@ -64,6 +85,9 @@ class DAEContentHandler extends DefaultHandler {
             String parentSourceId = elementIdStack.peek();
             DAESource parentSource = (DAESource) elementsMap.get(parentSourceId);
             parentSource.setData((DAEFloatArray) buildElement);
+        }
+        if (currentElementTag.equalsIgnoreCase("p")){
+            geometry.setIndices((DAEIntArray) buildElement);
         }
     }
 
