@@ -7,6 +7,11 @@ public class DAESource implements DAEElement{
     private DAEFloatArray data;
     private int count;
     private int stride;
+    private String id;
+
+    public DAESource(String id) {
+        this.id = id;
+    }
 
     public void setCount(int count) {
         this.count = count;
@@ -30,5 +35,15 @@ public class DAESource implements DAEElement{
 
     public int getStride() {
         return stride;
+    }
+
+    @Override
+    public boolean hasId() {
+        return true;
+    }
+
+    @Override
+    public String getId() {
+        return id;
     }
 }

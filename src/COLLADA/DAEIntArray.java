@@ -8,11 +8,21 @@ import java.nio.IntBuffer;
  */
 public class DAEIntArray implements DAEElement {
     IntBuffer dataBuffer;
-    DAEIntArray (int[] data){
+    DAEIntArray(int[] data){
         ByteBuffer byteBuffer = ByteBuffer.allocate(4 * data.length);
         dataBuffer = byteBuffer.asIntBuffer();
     }
     public int getCount() {
         return dataBuffer.capacity();
+    }
+
+    @Override
+    public boolean hasId() {
+        return false;
+    }
+
+    @Override
+    public String getId() {
+        return null;
     }
 }
