@@ -46,4 +46,13 @@ public class DAEParser_Tests extends TestCase {
        DAEIntArray indices = suzanneGeometry.getIndices();
        assertEquals(5808, indices.getCount());
    }
+
+   public void testBuildMesh() throws Exception{
+       DAEParser cubeParser = new DAEParser(CUBE_FILE);
+       MockMeshBuilder meshBuilder = new MockMeshBuilder();
+       sphereParser.buildMesh(meshBuilder, "Cube-mesh");
+       assertEquals(8, ((DAESource)meshBuilder.getPositionSource()).getAccessor().getCount());
+       assertEquals(12, ((DAESource)meshBuilder.getNormalsSource()).getAccessor().getCount());
+       assertEquals(36, meshBuilder.getIndicesCalls());
+   }
 }
