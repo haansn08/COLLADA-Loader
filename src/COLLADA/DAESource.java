@@ -5,20 +5,11 @@ package COLLADA;
  */
 public class DAESource implements DAEElement{
     private DAEFloatArray data;
-    private int count;
-    private int stride;
+    private DAEAccessor accessor;
     private String id;
 
     public DAESource(String id) {
         this.id = id;
-    }
-
-    public void setCount(int count) {
-        this.count = count;
-    }
-
-    void setStride(int stride) {
-        this.stride = stride;
     }
 
     void setData(DAEFloatArray data) {
@@ -29,14 +20,6 @@ public class DAESource implements DAEElement{
         return data;
     }
 
-    public int getCount() {
-        return count;
-    }
-
-    public int getStride() {
-        return stride;
-    }
-
     @Override
     public boolean hasId() {
         return true;
@@ -45,5 +28,13 @@ public class DAESource implements DAEElement{
     @Override
     public String getId() {
         return id;
+    }
+
+    public DAEAccessor getAccessor() {
+        return accessor;
+    }
+
+    void setAccessor(DAEAccessor accessor) {
+        this.accessor = accessor;
     }
 }

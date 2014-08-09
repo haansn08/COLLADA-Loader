@@ -27,7 +27,10 @@ class DAEContentHandler extends DefaultHandler {
         super.startElement(uri, localName, tagName, attributes);
 
         nodeContent.delete(0, nodeContent.length());
+        beginNode(tagName, attributes);
+    }
 
+    private void beginNode(String tagName, Attributes attributes) {
         NodeBuilder newNodeBuilder = NodeBuilderFactory.getNodeBuilder(tagName);
         newNodeBuilder.beginBuild(attributes);
         nodeBuilderStack.push(
@@ -38,17 +41,27 @@ class DAEContentHandler extends DefaultHandler {
     @Override
     public void endElement(String uri, String localName, String tagName) throws SAXException {
         super.endElement(uri, localName, tagName);
-        NodeBuilder currentBuilder = nodeBuilderStack.pop();
-        currentBuilder.setContent(nodeContent.toString());
+        NodeBuilder currentBuilder = finishNode();
 
         DAEElement builderResult = currentBuilder.getBuildResult();
+
         if (builderResult.hasId())
             elementsMap.put(builderResult.getId(), builderResult);
 
-        if(!nodeBuilderStack.empty()){
-            NodeBuilder parentBuilder = nodeBuilderStack.peek();
-            parentBuilder.addChild(tagName, builderResult);
-        }
+        notifyParentNode(tagName, builderResult);
+    }
+
+    private void notifyParentNode(String tagName, DAEElement builderResult) {
+        if (nodeBuilderStack.empty())
+            return; //root element
+        NodeBuilder parentBuilder = nodeBuilderStack.peek();
+        parentBuilder.addChild(tagName, builderResult);
+    }
+
+    private NodeBuilder finishNode() {
+        NodeBuilder currentBuilder = nodeBuilderStack.pop();
+        currentBuilder.setContent(nodeContent.toString());
+        return currentBuilder;
     }
 
     @Override

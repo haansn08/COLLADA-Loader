@@ -16,6 +16,7 @@ class NodeBuilderFactory {
         }
         return result;
     }
+
     private static int[] parseIntArray(String ints) {
         String[] singleIntStrings = ints.split(" ");
         int[] result = new int[singleIntStrings.length];
@@ -24,12 +25,15 @@ class NodeBuilderFactory {
         }
         return result;
     }
-    private static class ForwardBuilder implements NodeBuilder{
+
+    private static class ParentBuilder implements NodeBuilder{
         DAEParent parent = new DAEParent();
+
         @Override
         public void beginBuild(Attributes attributes) {}
         @Override
         public void setContent(String content) {}
+
         @Override
         public void addChild(String tagName, DAEElement childElement) {
             parent.addChild(tagName, childElement);
@@ -39,9 +43,11 @@ class NodeBuilderFactory {
             return parent;
         }
     }
+
     private static class FloatArrayBuilder implements NodeBuilder{
         String id;
         DAEFloatArray buildResult;
+
         @Override
         public void beginBuild(Attributes attributes) {
             id = attributes.getValue("id");
@@ -63,6 +69,7 @@ class NodeBuilderFactory {
     }
     private static class SourceBuilder implements NodeBuilder{
         DAESource buildResult;
+
         @Override
         public void beginBuild(Attributes attributes) {
             buildResult = new DAESource(
@@ -71,20 +78,20 @@ class NodeBuilderFactory {
         }
 
         @Override
-        public void setContent(String content) {
-
-        }
+        public void setContent(String content) {}
 
         @Override
         public void addChild(String tagName, DAEElement childElement) {
             if (tagName.equalsIgnoreCase("float_array"))
                 buildResult.setData((DAEFloatArray) childElement);
-            if (tagName.equalsIgnoreCase("technique_common")){
-                DAEParent parent = (DAEParent)childElement; //Contains DAEAccessor
-                DAEAccessor accessor = (DAEAccessor) parent.getFirstChild();
-                buildResult.setCount(accessor.getCount());
-                buildResult.setStride(accessor.getStride());
-            }
+            if (tagName.equalsIgnoreCase("technique_common"))
+                addAccessor((DAEParent) childElement);
+
+        }
+
+        private void addAccessor(DAEParent childElement) {
+            DAEAccessor accessor = (DAEAccessor) childElement.getFirstChild();
+            buildResult.setAccessor(accessor);
         }
 
         @Override
@@ -105,14 +112,10 @@ class NodeBuilderFactory {
         }
 
         @Override
-        public void setContent(String content) {
-
-        }
+        public void setContent(String content) {}
 
         @Override
-        public void addChild(String tagName, DAEElement childElement) {
-
-        }
+        public void addChild(String tagName, DAEElement childElement) {}
 
         @Override
         public DAEElement getBuildResult() {
@@ -143,19 +146,21 @@ class NodeBuilderFactory {
 
         private void addIndices(DAEParent parent) {
             Collection<DAEElement> indicesElement = parent.getChildrenByTagName("p");
-            DAEIntArray indices = (DAEIntArray) indicesElement.toArray()[0];
+            DAEIntArray indices = (DAEIntArray) indicesElement.iterator().next(); //first and only element
             buildResult.setIndices(indices);
         }
 
         private void addSources(DAEParent parent) {
             Collection<DAEElement> daeInputs = parent.getChildrenByTagName("input");
-            for (DAEElement inputElement : daeInputs) {
-                DAEInput input = (DAEInput)inputElement;
-                buildResult.setSource(
-                        input.getSemantic(),
-                        (DAESource) parent.getChildById(input.getSourceID())
-                );
-            }
+            for (DAEElement inputElement : daeInputs)
+                addSource(parent, (DAEInput) inputElement);
+        }
+
+        private void addSource(DAEParent parent, DAEInput inputElement) {
+            buildResult.setSource(
+                    inputElement.getSemantic(),
+                    (DAESource) parent.getChildById(inputElement.getSourceID())
+            );
         }
 
         @Override
@@ -184,14 +189,10 @@ class NodeBuilderFactory {
         }
 
         @Override
-        public void setContent(String content) {
-
-        }
+        public void setContent(String content) {}
 
         @Override
-        public void addChild(String tagName, DAEElement childElement) {
-
-        }
+        public void addChild(String tagName, DAEElement childElement) {}
 
         @Override
         public DAEElement getBuildResult() {
@@ -201,9 +202,7 @@ class NodeBuilderFactory {
     private static class IndicesBuilder implements NodeBuilder{
         DAEIntArray indices;
         @Override
-        public void beginBuild(Attributes attributes) {
-
-        }
+        public void beginBuild(Attributes attributes) {}
 
         @Override
         public void setContent(String content) {
@@ -211,9 +210,7 @@ class NodeBuilderFactory {
         }
 
         @Override
-        public void addChild(String tagName, DAEElement childElement) {
-
-        }
+        public void addChild(String tagName, DAEElement childElement) {}
 
         @Override
         public DAEElement getBuildResult() {
@@ -234,6 +231,6 @@ class NodeBuilderFactory {
             return new InputBuilder();
         if (tagName.equalsIgnoreCase("p"))
             return new IndicesBuilder();
-        return new ForwardBuilder();
+        return new ParentBuilder();
     }
 }

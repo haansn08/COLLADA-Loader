@@ -25,22 +25,22 @@ public class DAEParser_Tests extends TestCase {
        DAESource positionSource = (DAESource)sphereParser.getElementByID("Icosphere-mesh-positions");
        DAEFloatArray positions = positionSource.getData();
        assertEquals(126, positions.getCount());
-       assertEquals(42, positionSource.getCount());
-       assertEquals(3, positionSource.getStride());
+       assertEquals(42, positionSource.getAccessor().getCount());
+       assertEquals(3, positionSource.getAccessor().getStride());
 
        DAESource normalsSource = (DAESource)sphereParser.getElementByID("Icosphere-mesh-normals");
-       assertEquals(80, normalsSource.getCount());
+       assertEquals(80, normalsSource.getAccessor().getCount());
    }
 
    public void testParseGeometry() throws Exception{
        DAEParser suzanneParser = new DAEParser(SUZANNE_FILE);
        DAEGeometry suzanneGeometry = (DAEGeometry) suzanneParser.getElementByID("Suzanne-mesh");
        DAESource meshPositions = suzanneGeometry.getSourceBySemantic(DAESemantic.POSITION);
-       assertEquals(507, meshPositions.getCount());
-       assertEquals(3, meshPositions.getStride());
+       assertEquals(507, meshPositions.getAccessor().getCount());
+       assertEquals(3, meshPositions.getAccessor().getStride());
 
        DAESource meshNormals = suzanneGeometry.getSourceBySemantic(DAESemantic.NORMAL);
-       assertEquals(968, meshNormals.getCount());
+       assertEquals(968, meshNormals.getAccessor().getCount());
        assertEquals(968 * 3, meshNormals.getData().getCount());
 
        DAEIntArray indices = suzanneGeometry.getIndices();
