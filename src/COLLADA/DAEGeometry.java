@@ -1,6 +1,8 @@
 package COLLADA;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -8,6 +10,7 @@ import java.util.Map;
  */
 public class DAEGeometry implements DAEElement {
     private String id;
+    private List<DAESemantic> semantics = new ArrayList<DAESemantic>();
     private Map<DAESemantic, DAESource> sourceMap = new HashMap<DAESemantic, DAESource>();
     private DAEIntArray indices;
 
@@ -20,6 +23,8 @@ public class DAEGeometry implements DAEElement {
     }
     void setSource (DAESemantic semantic, DAESource source){
         sourceMap.put(semantic, source);
+        if (semantic != DAESemantic.VERTEX) //Just refers to positions
+            semantics.add(semantic);
     }
     public DAEIntArray getIndices() {
         return indices;
@@ -36,5 +41,11 @@ public class DAEGeometry implements DAEElement {
     @Override
     public String getId() {
         return id;
+    }
+
+    public DAESemantic[] getSemantics() {
+       DAESemantic[] result = new DAESemantic[semantics.size()];
+       semantics.toArray(result);
+       return result;
     }
 }

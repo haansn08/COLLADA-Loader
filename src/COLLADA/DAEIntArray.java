@@ -7,13 +7,12 @@ import java.nio.IntBuffer;
  * Created by Stefan Haan on 8/5/14.
  */
 public class DAEIntArray implements DAEElement {
-    IntBuffer dataBuffer;
+    int[] data;
     DAEIntArray(int[] data){
-        ByteBuffer byteBuffer = ByteBuffer.allocate(4 * data.length);
-        dataBuffer = byteBuffer.asIntBuffer();
+        this.data = data;
     }
     public int getCount() {
-        return dataBuffer.capacity();
+        return data.length;
     }
 
     @Override

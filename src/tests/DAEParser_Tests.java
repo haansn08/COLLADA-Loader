@@ -2,6 +2,7 @@ package tests;
 
 import COLLADA.*;
 import junit.framework.TestCase;
+import org.junit.Assert;
 
 /**
  * Created by Stefan Haan on 8/4/14.
@@ -47,12 +48,22 @@ public class DAEParser_Tests extends TestCase {
        assertEquals(5808, indices.getCount());
    }
 
-   public void testBuildMesh() throws Exception{
+   public void testGetSemanticsTest() throws Exception{
+       DAEParser cubeParser = new DAEParser(CUBE_FILE);
+       DAEGeometry cubeGeometry = (DAEGeometry) cubeParser.getElementByID("Cube-mesh");
+       DAESemantic[] cubeSemantics = cubeGeometry.getSemantics();
+       assertEquals(2, cubeSemantics.length);
+       Assert.assertArrayEquals(
+               new DAESemantic[]{DAESemantic.POSITION, DAESemantic.NORMAL},
+               cubeSemantics
+       );
+   }
+
+   public void testBuildMeshSimple() throws Exception{
        DAEParser cubeParser = new DAEParser(CUBE_FILE);
        MockMeshBuilder meshBuilder = new MockMeshBuilder();
-       sphereParser.buildMesh(meshBuilder, "Cube-mesh");
-       assertEquals(8, ((DAESource)meshBuilder.getPositionSource()).getAccessor().getCount());
-       assertEquals(12, ((DAESource)meshBuilder.getNormalsSource()).getAccessor().getCount());
-       assertEquals(36, meshBuilder.getIndicesCalls());
+       cubeParser.buildMesh(meshBuilder, "Cube-mesh");
+       assertEquals(36, meshBuilder.getVertexCount());
+       assertEquals(36, meshBuilder.getIndicesCount());
    }
 }

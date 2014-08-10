@@ -37,4 +37,13 @@ public class DAESource implements DAEElement{
     void setAccessor(DAEAccessor accessor) {
         this.accessor = accessor;
     }
+
+    public float[] getDataByIndex(int index) {
+        float[] result = new float[accessor.getStride()];
+        for (int i = 0; i < result.length; i++) {
+            result[i] = data.data[index*result.length + i];
+        }
+        return result;
+    }
+
 }

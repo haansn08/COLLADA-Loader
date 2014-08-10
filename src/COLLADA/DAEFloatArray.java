@@ -8,18 +8,14 @@ import java.nio.FloatBuffer;
  */
 public class DAEFloatArray implements DAEElement{
     private String id;
-    private FloatBuffer floatBuffer;
+    float[] data;
     DAEFloatArray(String id, float[] source)
     {
         this.id = id;
-
-        ByteBuffer byteBuffer = ByteBuffer.allocate(4 * source.length);
-        floatBuffer = byteBuffer.asFloatBuffer();
-        floatBuffer.put(source);
-        floatBuffer.flip();
+        data = source;
     }
     public int getCount() {
-        return floatBuffer.capacity();
+        return data.length;
     }
 
     @Override
