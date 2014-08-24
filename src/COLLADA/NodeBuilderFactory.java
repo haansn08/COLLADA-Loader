@@ -26,14 +26,8 @@ class NodeBuilderFactory {
         return result;
     }
 
-    private static class ParentBuilder implements NodeBuilder{
+    private static class ParentBuilder extends NodeBuilder{
         DAEParent parent = new DAEParent();
-
-        @Override
-        public void beginBuild(Attributes attributes) {}
-        @Override
-        public void setContent(String content) {}
-
         @Override
         public void addChild(String tagName, DAEElement childElement) {
             parent.addChild(tagName, childElement);
@@ -44,7 +38,7 @@ class NodeBuilderFactory {
         }
     }
 
-    private static class FloatArrayBuilder implements NodeBuilder{
+    private static class FloatArrayBuilder extends NodeBuilder{
         String id;
         DAEFloatArray buildResult;
 
@@ -60,14 +54,11 @@ class NodeBuilderFactory {
         }
 
         @Override
-        public void addChild(String tagName, DAEElement childElement) {}
-
-        @Override
         public DAEElement getBuildResult() {
             return buildResult;
         }
     }
-    private static class SourceBuilder implements NodeBuilder{
+    private static class SourceBuilder extends NodeBuilder{
         DAESource buildResult;
 
         @Override
@@ -76,10 +67,6 @@ class NodeBuilderFactory {
                     attributes.getValue("id")
             );
         }
-
-        @Override
-        public void setContent(String content) {}
-
         @Override
         public void addChild(String tagName, DAEElement childElement) {
             if (tagName.equalsIgnoreCase("float_array"))
@@ -99,7 +86,7 @@ class NodeBuilderFactory {
             return buildResult;
         }
     }
-    private static class AccessorBuilder implements NodeBuilder{
+    private static class AccessorBuilder extends NodeBuilder{
         DAEAccessor buildResult = new DAEAccessor();
         @Override
         public void beginBuild(Attributes attributes) {
@@ -110,19 +97,12 @@ class NodeBuilderFactory {
                     Integer.parseInt(attributes.getValue("stride"))
             );
         }
-
-        @Override
-        public void setContent(String content) {}
-
-        @Override
-        public void addChild(String tagName, DAEElement childElement) {}
-
         @Override
         public DAEElement getBuildResult() {
             return buildResult;
         }
     }
-    private static class GeometryBuilder implements NodeBuilder{
+    private static class GeometryBuilder extends NodeBuilder{
         DAEGeometry buildResult;
         @Override
         public void beginBuild(Attributes attributes) {
@@ -130,10 +110,6 @@ class NodeBuilderFactory {
                     attributes.getValue("id")
             );
         }
-
-        @Override
-        public void setContent(String content) {}
-
         @Override
         public void addChild(String tagName, DAEElement childElement) {
             if (tagName.equalsIgnoreCase("mesh"))
@@ -168,7 +144,7 @@ class NodeBuilderFactory {
             return buildResult;
         }
     }
-    private static class InputBuilder implements NodeBuilder{
+    private static class InputBuilder extends NodeBuilder{
         DAEInput buildResult = new DAEInput();
         @Override
         public void beginBuild(Attributes attributes) {
@@ -189,28 +165,17 @@ class NodeBuilderFactory {
         }
 
         @Override
-        public void setContent(String content) {}
-
-        @Override
-        public void addChild(String tagName, DAEElement childElement) {}
-
-        @Override
         public DAEElement getBuildResult() {
             return buildResult;
         }
     }
-    private static class IndicesBuilder implements NodeBuilder{
+    private static class IndicesBuilder extends NodeBuilder{
         DAEIntArray indices;
-        @Override
-        public void beginBuild(Attributes attributes) {}
 
         @Override
         public void setContent(String content) {
             indices = new DAEIntArray(parseIntArray(content));
         }
-
-        @Override
-        public void addChild(String tagName, DAEElement childElement) {}
 
         @Override
         public DAEElement getBuildResult() {
