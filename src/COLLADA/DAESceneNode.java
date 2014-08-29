@@ -5,6 +5,8 @@ package COLLADA;
  */
 public class DAESceneNode implements DAEElement{
     private String id;
+    public float[] transformation;
+
     @Override
     public boolean hasId() {
         return true;

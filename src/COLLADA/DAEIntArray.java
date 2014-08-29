@@ -1,8 +1,5 @@
 package COLLADA;
 
-import java.nio.ByteBuffer;
-import java.nio.IntBuffer;
-
 /**
  * Created by Stefan Haan on 8/5/14.
  */

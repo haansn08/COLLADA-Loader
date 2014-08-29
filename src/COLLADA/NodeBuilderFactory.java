@@ -271,6 +271,12 @@ class NodeBuilderFactory {
         }
 
         @Override
+        void addChild(String tagName, DAEElement childElement) {
+            if (tagName.equalsIgnoreCase("matrix"))
+                result.transformation = ((DAEFloatArray) childElement).data;
+        }
+
+        @Override
         DAEElement getBuildResult() {
             return result;
         }
@@ -317,6 +323,8 @@ class NodeBuilderFactory {
             return new SceneNodeBuilder();
         if (tagName.equalsIgnoreCase("visual_scene"))
             return new SceneBuilder();
+        if (tagName.equalsIgnoreCase("matrix"))
+            return new FloatArrayBuilder();
         return new ParentBuilder();
     }
 

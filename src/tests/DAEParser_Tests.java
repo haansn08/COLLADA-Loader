@@ -96,7 +96,8 @@ public class DAEParser_Tests extends TestCase {
         DAESceneNode letterBNode = (DAESceneNode) lettersParser.getElementByID("LETTER_B");
         Assert.assertArrayEquals(
                 new float[]{1f, 0f, 0f, 1.866207f, 0f, 1f, 0f, -1.56606e-7f, 0f, 0f, 1f, 0.6470411f, 0f, 0f, 0f, 1f},
-                letterBNode.transformation
+                letterBNode.transformation,
+                0.01f
         );
     }
 }
