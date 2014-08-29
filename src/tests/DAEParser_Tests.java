@@ -9,12 +9,17 @@ import org.junit.Assert;
  */
 public class DAEParser_Tests extends TestCase {
     private final static String CUBE_FILE = "res/Cube.dae";
+    DAEParser cubeParser = new DAEParser(CUBE_FILE);
     private final static String SUZANNE_FILE = "res/Suzanne.dae";
+    DAEParser suzanneParser = new DAEParser(SUZANNE_FILE);
     private final static String SPHERE_UV_FILE = "res/SphereUV.dae";
+    DAEParser sphereParser = new DAEParser(SPHERE_UV_FILE);
     private final static String LETTERS_FILE = "res/rgb.dae";
+    DAEParser lettersParser = new DAEParser(LETTERS_FILE);
+
+    public DAEParser_Tests() throws Exception {}
 
     public void testParseFloatArray() throws Exception {
-        DAEParser cubeParser = new DAEParser(CUBE_FILE);
         DAEFloatArray cubeMeshPositions = (DAEFloatArray) cubeParser.getElementByID("Cube-mesh-positions-array");
         assertEquals(24, cubeMeshPositions.getCount());
 
@@ -23,7 +28,6 @@ public class DAEParser_Tests extends TestCase {
     }
 
    public void testParseSource() throws Exception{
-       DAEParser sphereParser = new DAEParser(SPHERE_UV_FILE);
        DAESource positionSource = (DAESource)sphereParser.getElementByID("Icosphere-mesh-positions");
        DAEFloatArray positions = positionSource.getData();
        assertEquals(126, positions.getCount());
@@ -35,7 +39,6 @@ public class DAEParser_Tests extends TestCase {
    }
 
    public void testParseGeometry() throws Exception{
-       DAEParser suzanneParser = new DAEParser(SUZANNE_FILE);
        DAEGeometry suzanneGeometry = (DAEGeometry) suzanneParser.getElementByID("Suzanne-mesh");
        DAESource meshPositions = suzanneGeometry.getSourceBySemantic(DAESemantic.POSITION);
        assertEquals(507, meshPositions.getAccessor().getCount());
@@ -50,7 +53,6 @@ public class DAEParser_Tests extends TestCase {
    }
 
    public void testGetSemanticsTest() throws Exception{
-       DAEParser cubeParser = new DAEParser(CUBE_FILE);
        DAEGeometry cubeGeometry = (DAEGeometry) cubeParser.getElementByID("Cube-mesh");
        DAESemantic[] cubeSemantics = cubeGeometry.getSemantics();
        assertEquals(2, cubeSemantics.length);
@@ -61,7 +63,6 @@ public class DAEParser_Tests extends TestCase {
    }
 
    public void testBuildMeshSimple() throws Exception{
-       DAEParser cubeParser = new DAEParser(CUBE_FILE);
        MockMeshBuilder meshBuilder = new MockMeshBuilder();
        cubeParser.buildMesh(meshBuilder, "Cube-mesh");
        assertEquals(36, meshBuilder.getVertexCount());
@@ -69,7 +70,6 @@ public class DAEParser_Tests extends TestCase {
    }
 
     public void testGetEffect() throws Exception{
-        DAEParser lettersParser = new DAEParser(LETTERS_FILE);
         DAEEffect redMatEffect = (DAEEffect) lettersParser.getElementByID("RED_MAT-effect");
         Assert.assertArrayEquals(new float[]{0.64f, 0f, 0f, 1f}, redMatEffect.diffuseColor, 0.01f);
         Assert.assertArrayEquals(new float[]{1f, 1f, 1f, 1f}, redMatEffect.specularColor, 0.01f);
@@ -81,7 +81,6 @@ public class DAEParser_Tests extends TestCase {
     }
 
     public void testGetSceneNodes() throws Exception{
-        DAEParser lettersParser = new DAEParser(LETTERS_FILE);
         DAEScene lettersScene = (DAEScene) lettersParser.getElementByID("Scene");
         DAESceneNode[] lettersNodes = lettersScene.getNodes();
         String[] lettersNodesIDs = new String[lettersNodes.length];
@@ -92,4 +91,5 @@ public class DAEParser_Tests extends TestCase {
                 lettersNodesIDs
         );
     }
+
 }
