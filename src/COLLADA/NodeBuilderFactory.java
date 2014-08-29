@@ -260,6 +260,39 @@ class NodeBuilderFactory {
             return result;
         }
     }
+    private static class SceneNodeBuilder extends NodeBuilder{
+        DAESceneNode result;
+
+        @Override
+        void beginBuild(Attributes attributes) {
+            result = new DAESceneNode(
+                    attributes.getValue("id")
+            );
+        }
+
+        @Override
+        DAEElement getBuildResult() {
+            return result;
+        }
+    }
+    private static class SceneBuilder extends NodeBuilder{
+        DAEScene result;
+        @Override
+        void beginBuild(Attributes attributes) {
+            result = new DAEScene(
+                    attributes.getValue("id")
+            );
+        }
+        @Override
+        void addChild(String tagName, DAEElement childElement) {
+            if (tagName.equalsIgnoreCase("node"))
+                result.addNode((DAESceneNode) childElement);
+        }
+        @Override
+        DAEElement getBuildResult() {
+            return result;
+        }
+    }
 
     static NodeBuilder getNodeBuilder(String tagName){
         if (tagName.equalsIgnoreCase("float_array"))
@@ -280,6 +313,10 @@ class NodeBuilderFactory {
             return new FloatBuilder();
         if (tagName.equalsIgnoreCase("color"))
             return new ColorBuilder();
+        if (tagName.equalsIgnoreCase("node"))
+            return new SceneNodeBuilder();
+        if (tagName.equalsIgnoreCase("visual_scene"))
+            return new SceneBuilder();
         return new ParentBuilder();
     }
 

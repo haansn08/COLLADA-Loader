@@ -82,7 +82,7 @@ public class DAEParser_Tests extends TestCase {
 
     public void testGetSceneNodes() throws Exception{
         DAEParser lettersParser = new DAEParser(LETTERS_FILE);
-        DAEScene lettersScene = lettersParser.getElementByID("Scene");
+        DAEScene lettersScene = (DAEScene) lettersParser.getElementByID("Scene");
         DAESceneNode[] lettersNodes = lettersScene.getNodes();
         String[] lettersNodesIDs = new String[lettersNodes.length];
         for (int i = 0; i < lettersNodes.length; i++)
