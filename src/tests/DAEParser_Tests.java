@@ -79,4 +79,17 @@ public class DAEParser_Tests extends TestCase {
         Assert.assertArrayEquals(new float[]{.5f, .5f, .5f, 1f}, greenMatEffect.specularColor, 0.01f);
         assertEquals(50f, greenMatEffect.shininess);
     }
+
+    public void testGetSceneNodes() throws Exception{
+        DAEParser lettersParser = new DAEParser(LETTERS_FILE);
+        DAEScene lettersScene = lettersParser.getElementByID("Scene");
+        DAESceneNode[] lettersNodes = lettersScene.getNodes();
+        String[] lettersNodesIDs = new String[lettersNodes.length];
+        for (int i = 0; i < lettersNodes.length; i++)
+            lettersNodesIDs[i] = lettersNodes[i].getId();
+        Assert.assertArrayEquals(
+                new String[]{"LETTER_R", "LETTER_B", "LETTER_G", "GROUND"},
+                lettersNodesIDs
+        );
+    }
 }
