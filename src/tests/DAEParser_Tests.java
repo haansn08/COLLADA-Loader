@@ -71,12 +71,12 @@ public class DAEParser_Tests extends TestCase {
     public void testGetEffect() throws Exception{
         DAEParser lettersParser = new DAEParser(LETTERS_FILE);
         DAEEffect redMatEffect = (DAEEffect) lettersParser.getElementByID("RED_MAT-effect");
-        Assert.assertArrayEquals(new float[]{0.64f, 0f, 0f, 1f}, redMatEffect.diffuseColor, 0.01);
-        Assert.assertArrayEquals(new float[]{1f, 1f, 1f, 1f}, redMatEffect.specularColor, 0.01);
-        assertEquals(13, redMatEffect.shininess);
+        Assert.assertArrayEquals(new float[]{0.64f, 0f, 0f, 1f}, redMatEffect.diffuseColor, 0.01f);
+        Assert.assertArrayEquals(new float[]{1f, 1f, 1f, 1f}, redMatEffect.specularColor, 0.01f);
+        assertEquals(13f, redMatEffect.shininess);
 
         DAEEffect greenMatEffect = (DAEEffect) lettersParser.getElementByID("GREEN_MAT-effect");
-        Assert.assertArrayEquals(new float[]{.5f, .5f, .5f, 1f}, greenMatEffect.specularColor, 0.01);
-        assertEquals(50, greenMatEffect.shininess);
+        Assert.assertArrayEquals(new float[]{.5f, .5f, .5f, 1f}, greenMatEffect.specularColor, 0.01f);
+        assertEquals(50f, greenMatEffect.shininess);
     }
 }

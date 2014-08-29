@@ -182,6 +182,84 @@ class NodeBuilderFactory {
             return indices;
         }
     }
+    private static class EffectBuilder extends NodeBuilder{
+        DAEEffect result;
+        @Override
+        DAEElement getBuildResult() {
+            return result;
+        }
+        @Override
+        void beginBuild(Attributes attributes) {
+            result = new DAEEffect(
+                    attributes.getValue("id")
+            );
+        }
+
+        @Override
+        void addChild(String tagName, DAEElement childElement) {
+            if (tagName.equalsIgnoreCase("profile_COMMON")){
+                addColors((DAEParent) childElement);
+                addValues((DAEParent) childElement);
+            }
+        }
+
+        private void addValues(DAEParent profileElement) {
+            Collection<DAEElement> values =  profileElement.getChildrenByTagName("float");
+            for (DAEElement value : values) {
+                DAEFloat valueFloat = (DAEFloat) value;
+                String sid = valueFloat.getSid();
+                if (sid.equalsIgnoreCase("shininess"))
+                    result.shininess = valueFloat.value;
+            }
+        }
+
+        private void addColors(DAEParent profileElement) {
+            Collection<DAEElement> colors = profileElement.getChildrenByTagName("color");
+            for (DAEElement colorElement : colors) {
+                DAEColor color = (DAEColor) colorElement;
+                String sid = color.getSid();
+                if (sid.equalsIgnoreCase("diffuse"))
+                    result.diffuseColor = color.data;
+                if (sid.equalsIgnoreCase("specular"))
+                    result.specularColor = color.data;
+            }
+        }
+    }
+    private static class FloatBuilder extends NodeBuilder{
+        DAEFloat result;
+
+        @Override
+        void beginBuild(Attributes attributes) {
+            result = new DAEFloat(attributes.getValue("sid"));
+        }
+
+        @Override
+        void setContent(String content) {
+            result.value = Float.parseFloat(content);
+        }
+
+        @Override
+        DAEElement getBuildResult() {
+            return result;
+        }
+    }
+    private static class ColorBuilder extends NodeBuilder {
+        DAEColor result;
+        @Override
+        void beginBuild(Attributes attributes) {
+            result = new DAEColor(attributes.getValue("sid"));
+        }
+
+        @Override
+        void setContent(String content) {
+            result.data = parseFloatArray(content);
+        }
+
+        @Override
+        DAEElement getBuildResult() {
+            return result;
+        }
+    }
 
     static NodeBuilder getNodeBuilder(String tagName){
         if (tagName.equalsIgnoreCase("float_array"))
@@ -196,6 +274,13 @@ class NodeBuilderFactory {
             return new InputBuilder();
         if (tagName.equalsIgnoreCase("p"))
             return new IndicesBuilder();
+        if (tagName.equalsIgnoreCase("effect"))
+            return new EffectBuilder();
+        if (tagName.equalsIgnoreCase("float"))
+            return new FloatBuilder();
+        if (tagName.equalsIgnoreCase("color"))
+            return new ColorBuilder();
         return new ParentBuilder();
     }
+
 }
