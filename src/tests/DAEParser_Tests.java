@@ -100,4 +100,9 @@ public class DAEParser_Tests extends TestCase {
                 0.01f
         );
     }
+
+    public void testGetMeshName() throws Exception{
+        DAESceneNode letterRNode = (DAESceneNode) lettersParser.getElementByID("LETTER_R");
+        assertEquals("LETTER_R-mesh", letterRNode.meshId);
+    }
 }

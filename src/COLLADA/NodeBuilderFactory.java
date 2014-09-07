@@ -274,6 +274,8 @@ class NodeBuilderFactory {
         void addChild(String tagName, DAEElement childElement) {
             if (tagName.equalsIgnoreCase("matrix"))
                 result.transformation = ((DAEFloatArray) childElement).data;
+            if (tagName.equalsIgnoreCase("instance_geometry"))
+                result.meshId = ((DAEIdReference)childElement).getReferenceId();
         }
 
         @Override
@@ -293,6 +295,19 @@ class NodeBuilderFactory {
         void addChild(String tagName, DAEElement childElement) {
             if (tagName.equalsIgnoreCase("node"))
                 result.addNode((DAESceneNode) childElement);
+        }
+        @Override
+        DAEElement getBuildResult() {
+            return result;
+        }
+    }
+    private static class InstanceGeometryBuilder extends NodeBuilder{
+        DAEIdReference result;
+        @Override
+        void beginBuild(Attributes attributes) {
+            result = new DAEIdReference(
+                    attributes.getValue("url").substring(1)
+            );
         }
         @Override
         DAEElement getBuildResult() {
@@ -325,6 +340,8 @@ class NodeBuilderFactory {
             return new SceneBuilder();
         if (tagName.equalsIgnoreCase("matrix"))
             return new FloatArrayBuilder();
+        if (tagName.equalsIgnoreCase("instance_geometry"))
+            return new InstanceGeometryBuilder();
         return new ParentBuilder();
     }
 

@@ -6,6 +6,7 @@ package COLLADA;
 public class DAESceneNode implements DAEElement{
     private String id;
     public float[] transformation;
+    public String meshId;
 
     @Override
     public boolean hasId() {
