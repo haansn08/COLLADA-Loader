@@ -105,4 +105,9 @@ public class DAEParser_Tests extends TestCase {
         DAESceneNode letterRNode = (DAESceneNode) lettersParser.getElementByID("LETTER_R");
         assertEquals("LETTER_R-mesh", letterRNode.meshId);
     }
+
+    public void testGetMeshMaterial() throws Exception{
+        DAESceneNode letterGNode = (DAESceneNode)lettersParser.getElementByID("LETTER_G");
+        assertEquals("REEN_MAT-material", letterGNode.materialID);
+    }
 }

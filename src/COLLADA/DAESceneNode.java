@@ -7,6 +7,7 @@ public class DAESceneNode implements DAEElement{
     private String id;
     public float[] transformation;
     public String meshId;
+    public String materialID;
 
     @Override
     public boolean hasId() {

@@ -276,6 +276,8 @@ class NodeBuilderFactory {
                 result.transformation = ((DAEFloatArray) childElement).data;
             if (tagName.equalsIgnoreCase("instance_geometry"))
                 result.meshId = ((DAEIdReference)childElement).getReferenceId();
+            if (tagName.equalsIgnoreCase("instance_material"))
+                result.materialID = ((DAEIdReference) childElement).getReferenceId();
         }
 
         @Override
@@ -302,11 +304,17 @@ class NodeBuilderFactory {
         }
     }
     private static class InstanceGeometryBuilder extends NodeBuilder{
+        private String attributeName;
         DAEIdReference result;
+
+        InstanceGeometryBuilder(String attributeName){
+            this.attributeName = attributeName;
+        }
+
         @Override
         void beginBuild(Attributes attributes) {
             result = new DAEIdReference(
-                    attributes.getValue("url").substring(1)
+                    attributes.getValue(attributeName).substring(1)
             );
         }
         @Override
@@ -341,7 +349,9 @@ class NodeBuilderFactory {
         if (tagName.equalsIgnoreCase("matrix"))
             return new FloatArrayBuilder();
         if (tagName.equalsIgnoreCase("instance_geometry"))
-            return new InstanceGeometryBuilder();
+            return new InstanceGeometryBuilder("url");
+        if (tagName.equalsIgnoreCase("instance_material"))
+            return new InstanceGeometryBuilder("target");
         return new ParentBuilder();
     }
 
